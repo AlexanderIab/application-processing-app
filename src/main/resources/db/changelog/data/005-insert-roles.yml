@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: 5
+      author: Alexander Iablonski
+      changes:
+        - sql:
+            sql:
+              DROP EXTENSION "uuid-ossp";
+              CREATE EXTENSION "uuid-ossp";
+              INSERT INTO roles (id, name) VALUES
+              (uuid_generate_v4(), 'ADMIN'),
+              (uuid_generate_v4(), 'OPERATOR'),
+              (uuid_generate_v4(), 'USER');

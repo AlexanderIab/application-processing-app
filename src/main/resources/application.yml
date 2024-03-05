@@ -1,0 +1,13 @@
+server:
+  port: 8080
+spring:
+  liquibase:
+    enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+  datasource:
+    url: jdbc:postgresql://localhost:5432/processing
+    username: postgres
+    password: postgres

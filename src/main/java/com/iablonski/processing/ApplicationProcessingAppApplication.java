@@ -1,0 +1,13 @@
+package com.iablonski.processing;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class ApplicationProcessingAppApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(ApplicationProcessingAppApplication.class, args);
+    }
+
+}
