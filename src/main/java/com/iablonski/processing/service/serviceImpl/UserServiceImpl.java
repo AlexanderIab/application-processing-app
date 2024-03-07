@@ -2,6 +2,7 @@ package com.iablonski.processing.service.serviceImpl;
 
 import com.iablonski.processing.domain.Role;
 import com.iablonski.processing.domain.User;
+import com.iablonski.processing.exception.UserNotFoundException;
 import com.iablonski.processing.repository.RoleRepo;
 import com.iablonski.processing.dto.UserDTO;
 import com.iablonski.processing.mapper.UserMapper;
@@ -35,8 +36,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+
     public void giveOperatorRoleToUser(UUID userId) {
-        User user = userRepo.findById(userId).orElseThrow(() -> new RuntimeException("User does not exist"));
+        User user = userRepo.findById(userId).orElseThrow(() -> new UserNotFoundException("User does not exist"));
         Set<Role> userRoles = user.getRoles();
         Role role = roleRepo.findRoleByName("OPERATOR");
         userRoles.add(role);
@@ -46,6 +48,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserFromPrincipal(Principal principal) {
         String username = principal.getName();
-        return userRepo.findUserByUsername(username).orElseThrow(() -> new RuntimeException("User not found"));
+        return userRepo.findUserByUsername(username).orElseThrow(() -> new UserNotFoundException("User not found"));
     }
 }

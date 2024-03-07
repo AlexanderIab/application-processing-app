@@ -10,6 +10,6 @@ public record RequestDetailsDTO(UUID id,
                                 String text,
                                 String phoneNumber,
                                 StatusEnum status,
-                                LocalDateTime created,
+                                LocalDateTime createdAt,
                                 User user) {
 }

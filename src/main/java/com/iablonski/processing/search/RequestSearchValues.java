@@ -3,6 +3,7 @@ package com.iablonski.processing.search;
 import org.springframework.data.domain.Sort;
 
 public record RequestSearchValues(String username,
+                                  String status,
                                   Integer pageNumber,
                                   String sortDirection){
     public Sort.Direction getSortDirection() {

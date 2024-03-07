@@ -26,14 +26,14 @@ public class Request {
     private StatusEnum status;
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Column(name = "created", updatable = false)
-    private LocalDateTime created;
+    @Column(name = "createdAt", updatable = false)
+    private LocalDateTime createdAt;
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @PrePersist
     public void onCreate(){
-        this.created = LocalDateTime.now();
+        this.createdAt = LocalDateTime.now();
     }
 }

@@ -16,7 +16,7 @@ import java.security.Principal;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/requests")
+@RequestMapping("/api/request")
 public class RequestController {
     private final RequestService requestService;
 
