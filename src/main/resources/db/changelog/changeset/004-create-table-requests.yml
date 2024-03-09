@@ -13,14 +13,26 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
+                  name: title
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+              - column:
                   name: text
                   type: varchar(255)
               - column:
                   name: phone_number
-                  type: varchar(255)
+                  type: varchar(20)
               - column:
                   name: status
-                  type: varchar(255)
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: createdAt
+                  type: timestamp
+                  constraints:
+                    nullable: false
               - column:
                   name: user_id
                   type: uuid

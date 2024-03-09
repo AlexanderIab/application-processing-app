@@ -1,9 +1,10 @@
 package com.iablonski.processing.search;
 
+import com.iablonski.processing.domain.StatusEnum;
 import org.springframework.data.domain.Sort;
 
 public record RequestSearchValues(String username,
-                                  String status,
+                                  StatusEnum status,
                                   Integer pageNumber,
                                   String sortDirection){
     public Sort.Direction getSortDirection() {

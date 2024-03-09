@@ -7,10 +7,16 @@ databaseChangeLog:
             sql:
               INSERT INTO
               users (id, username, password) VALUES
-              (uuid_generate_v4(),'user_user', 'user_user'),
-              (uuid_generate_v4(),'user_operator', 'user_operator'),
-              (uuid_generate_v4(),'user_admin', 'user_admin'),
-              (uuid_generate_v4(),'admin_operator','admin_operator')
+              (uuid_generate_v4(),'user1', '$2a$12$0cEugk6CX75lqdePMD8L7uEac1mX3B8XKbw2UwYBk5UyiiTqLsJi2'),
+              (uuid_generate_v4(),'user2', '$2a$12$7d1RL57bAfHeHaPbHDbPt.b2QBauJU8fSVyPIZWTMI.O97eilk0Ly'),
+              (uuid_generate_v4(),'user3', '$2a$12$DoQZ713KMoVp/mWJaLGyw.B5U/8vCNaRT9zmBpvWVdQmPhyGId8Vq'),
+              (uuid_generate_v4(),'admin1', '$2a$12$CvVkpOiufUH1gqdcpcLFN.vk8eeQ6fGT5dORfFSpvX1HyTBanG4e.'),
+              (uuid_generate_v4(),'admin2', '$2a$12$Zb/vE4Ki0.Gm.igSP5SqG.QhgnGrf6f1a21.M6t19PkugUM8aP.ni'),
+              (uuid_generate_v4(),'operator1', '$2a$12$KnqhGY59ecBZpVk/y4gpL.ybf95sj2.RsLRZdUvwXsSxU7/a8fTnu'),
+              (uuid_generate_v4(),'operator2', '$2a$12$7A/gBJlCWXIHLZ/aohaFXuQ5BXLROZNA3uFCPkSs5V2mxgcEOgX/S'),
+              (uuid_generate_v4(),'admin_operator','$2a$12$YacIibcrbVL9bBKuWqOFWOHvrtWYwqNZCB0X/zHFU62lXQUW7QA72'),
+              (uuid_generate_v4(),'user_admin', '$2a$12$FF1vZC49MJ5kywDJJE.SzukmMJVLoylUcGM1ctEMcbY2ApIBPqg1i'),
+              (uuid_generate_v4(),'user_operator','$2a$12$okhcNRfxZFBr93xFMJNzEuO4jnSWf.qqC63nUBFObufdwQYGxdZ5i')
   - changeSet:
       id: 7
       author: Alexander Iablonski
@@ -18,18 +24,52 @@ databaseChangeLog:
         - sql:
             sql:
               INSERT INTO user_roles (user_id, role_id)
+              
               SELECT u.id, r.id
               FROM users u
-              JOIN roles r ON (u.username = 'user_user' AND r.name = 'USER')
+              JOIN roles r ON (u.username = 'user1' AND r.name = 'USER')
               UNION ALL
+              
               SELECT u.id, r.id
               FROM users u
-              JOIN roles r ON (u.username = 'user_operator' AND r.name = 'OPERATOR')
+              JOIN roles r ON (u.username = 'user2' AND r.name = 'USER')
               UNION ALL
+              
               SELECT u.id, r.id
               FROM users u
-              JOIN roles r ON (u.username = 'user_admin' AND r.name = 'ADMIN')
+              JOIN roles r ON (u.username = 'user3' AND r.name = 'USER')
               UNION ALL
+              
               SELECT u.id, r.id
               FROM users u
-              JOIN roles r ON (u.username = 'admin_operator' AND r.name IN ('ADMIN', 'OPERATOR'));
+              JOIN roles r ON (u.username = 'admin1' AND r.name = 'ADMIN')
+              UNION ALL
+              
+              SELECT u.id, r.id
+              FROM users u
+              JOIN roles r ON (u.username = 'admin2' AND r.name = 'ADMIN')
+              UNION ALL
+              
+              SELECT u.id, r.id
+              FROM users u
+              JOIN roles r ON (u.username = 'operator1' AND r.name = 'OPERATOR')
+              UNION ALL
+              
+              SELECT u.id, r.id
+              FROM users u
+              JOIN roles r ON (u.username = 'operator2' AND r.name = 'OPERATOR')
+              UNION ALL
+              
+              SELECT u.id, r.id
+              FROM users u
+              JOIN roles r ON (u.username = 'admin_operator' AND r.name IN ('ADMIN', 'OPERATOR'))
+              UNION ALL
+              
+              SELECT u.id, r.id
+              FROM users u
+              JOIN roles r ON (u.username = 'user_admin' AND r.name IN ('ADMIN', 'USER'))
+              UNION ALL
+              
+              SELECT u.id, r.id
+              FROM users u
+              JOIN roles r ON (u.username = 'user_operator' AND r.name IN ('OPERATOR', 'USER'));

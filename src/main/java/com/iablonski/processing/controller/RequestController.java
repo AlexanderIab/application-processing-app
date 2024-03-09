@@ -1,5 +1,6 @@
 package com.iablonski.processing.controller;
 
+import com.iablonski.processing.domain.StatusEnum;
 import com.iablonski.processing.dto.RequestDTO;
 import com.iablonski.processing.dto.RequestDetailsDTO;
 import com.iablonski.processing.payload.response.MessageResponse;
@@ -72,7 +73,7 @@ public class RequestController {
 
     @PostMapping("/operator/search")
     public ResponseEntity<Page<RequestDetailsDTO>> searchRequestByOperatorParams(@RequestBody RequestSearchValues values){
-        Sort sort = Sort.by(values.getSortDirection(), "created");
+        Sort sort = Sort.by(values.getSortDirection(), "createdAt");
         PageRequest pageRequest = PageRequest.of(values.pageNumber(), 5, sort);
         Page<RequestDetailsDTO> requestList = requestService.getAllRequestsByOperatorParams(values.username(), pageRequest);
         return ResponseEntity.ok(requestList);
@@ -81,14 +82,17 @@ public class RequestController {
     @PostMapping("/user/search")
     public ResponseEntity<Page<RequestDetailsDTO>> searchRequestByUserParams(@RequestBody RequestSearchValues values,
                                                                              Principal principal){
-        Sort sort = Sort.by(values.getSortDirection(), "created");
+        Sort sort = Sort.by(values.getSortDirection(), "createdAt");
         PageRequest pageRequest = PageRequest.of(values.pageNumber(), 5, sort);
         Page<RequestDetailsDTO> requestList = requestService.getRequestsBuUserParams(pageRequest, principal);
         return ResponseEntity.ok(requestList);
     }
 
-
-
-
-
+    @PostMapping("/status/search")
+    public ResponseEntity<Page<RequestDetailsDTO>> searchAllRequestByStatus(@RequestBody RequestSearchValues values){
+        Sort sort = Sort.by(values.getSortDirection(), "createdAt");
+        PageRequest pageRequest = PageRequest.of(values.pageNumber(), 5, sort);
+        Page<RequestDetailsDTO> requestList = requestService.getAllRequestsByStatus(values.status(), pageRequest);
+        return ResponseEntity.ok(requestList);
+    }
 }

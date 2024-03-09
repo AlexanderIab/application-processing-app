@@ -5,6 +5,7 @@ import com.iablonski.processing.domain.StatusEnum;
 import com.iablonski.processing.domain.User;
 import com.iablonski.processing.dto.RequestDTO;
 import com.iablonski.processing.dto.RequestDetailsDTO;
+import com.iablonski.processing.exception.InvalidRequestStateException;
 import com.iablonski.processing.exception.RequestNotFoundException;
 import com.iablonski.processing.exception.RequestUpdateException;
 import com.iablonski.processing.mapper.RequestMapper;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
 import java.util.UUID;
@@ -34,9 +36,11 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
+    @Transactional
     public void createRequest(RequestDTO requestDTO, Principal principal) {
         User user = userService.getUserFromPrincipal(principal);
         Request request = new Request();
+        request.setTitle(requestDTO.title());
         request.setText(requestDTO.text());
         request.setPhoneNumber(requestDTO.phoneNumber());
         request.setStatus(StatusEnum.DRAFT);
@@ -47,7 +51,7 @@ public class RequestServiceImpl implements RequestService {
     @Override
     public RequestDetailsDTO getRequestByIdAndStatus(UUID requestId) {
         Request request = requestRepo.findRequestByIdAndStatus(requestId, StatusEnum.SENT)
-                .orElseThrow(() -> new RuntimeException("Request not found"));
+                .orElseThrow(() -> new RequestNotFoundException("Request not found"));
         return requestMapper.toRequestDTO(request);
     }
 
@@ -55,7 +59,7 @@ public class RequestServiceImpl implements RequestService {
     public void sendRequest(UUID requestId) {
         Request request = getRequestById(requestId);
         if (request.getStatus() != StatusEnum.DRAFT) {
-            throw new IllegalStateException("Unable to send request with status " + request.getStatus());
+            throw new InvalidRequestStateException("Unable to send request with status " + request.getStatus());
         }
         request.setStatus(StatusEnum.SENT);
         requestRepo.save(request);
@@ -65,7 +69,7 @@ public class RequestServiceImpl implements RequestService {
     public void acceptRequest(UUID requestId) {
         Request request = getRequestById(requestId);
         if (request.getStatus() != StatusEnum.SENT) {
-            throw new IllegalStateException("Unable to accept request with status " + request.getStatus());
+            throw new InvalidRequestStateException("Unable to accept request with status " + request.getStatus());
         }
         request.setStatus(StatusEnum.ACCEPTED);
         requestRepo.save(request);
@@ -75,7 +79,7 @@ public class RequestServiceImpl implements RequestService {
     public void rejectRequest(UUID requestId) {
         Request request = getRequestById(requestId);
         if (request.getStatus() != StatusEnum.SENT) {
-            throw new IllegalStateException("Unable to reject request with status " + request.getStatus());
+            throw new InvalidRequestStateException("Unable to reject request with status " + request.getStatus());
         }
         request.setStatus(StatusEnum.REJECTED);
         requestRepo.save(request);
@@ -85,6 +89,7 @@ public class RequestServiceImpl implements RequestService {
     public void updateRequest(RequestDTO requestDTO) {
         Request request = requestRepo.findRequestByIdAndStatus(requestDTO.id(), StatusEnum.DRAFT)
                 .orElseThrow(() -> new RequestUpdateException("Unable to update request: request not found or not in DRAFT status"));
+        request.setTitle(requestDTO.title());
         request.setText(requestDTO.text());
         request.setPhoneNumber(requestDTO.phoneNumber());
         requestRepo.save(request);
@@ -94,6 +99,11 @@ public class RequestServiceImpl implements RequestService {
     public Page<RequestDetailsDTO> getRequestsBuUserParams(PageRequest pageRequest, Principal principal) {
         User user = userService.getUserFromPrincipal(principal);
         return requestRepo.findAllByUser(user, pageRequest).map(requestMapper::toRequestDTO);
+    }
+
+    @Override
+    public Page<RequestDetailsDTO> getAllRequestsByStatus(StatusEnum statusEnum, PageRequest pageRequest) {
+        return requestRepo.findAllRequestsByStatus(statusEnum, pageRequest).map(requestMapper::toRequestDTO);
     }
 
     @Override

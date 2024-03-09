@@ -19,6 +19,8 @@ public class Request {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+    @Column(nullable = false)
+    private String title;
     private String text;
     @Column(name = "phone_number")
     private String phoneNumber;

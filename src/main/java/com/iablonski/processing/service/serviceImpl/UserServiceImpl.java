@@ -10,6 +10,7 @@ import com.iablonski.processing.repository.UserRepo;
 import com.iablonski.processing.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
 import java.util.List;
@@ -36,7 +37,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-
+    @Transactional
     public void giveOperatorRoleToUser(UUID userId) {
         User user = userRepo.findById(userId).orElseThrow(() -> new UserNotFoundException("User does not exist"));
         Set<Role> userRoles = user.getRoles();

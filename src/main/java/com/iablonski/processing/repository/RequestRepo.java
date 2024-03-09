@@ -24,7 +24,9 @@ public interface RequestRepo extends JpaRepository<Request, UUID> {
 
     @Query("select r from Request r where (r.status = 'SENT' or r.status = 'ACCEPTED' or r.status = 'REJECTED') " +
             "and (:username is null or :username = '' or lower(r.user.username) " +
-            "like lower(concat('%', :username, '%'))) order by r.created desc")
+            "like lower(concat('%', :username, '%'))) order by r.createdAt desc")
     Page<Request> findRequestsByAdminParams(@Param("username") String username, Pageable pageable);
+
+    Page<Request> findAllRequestsByStatus(StatusEnum statusEnum, Pageable pageable);
     Page<Request> findAllByUser(User user, Pageable pageable);
 }
