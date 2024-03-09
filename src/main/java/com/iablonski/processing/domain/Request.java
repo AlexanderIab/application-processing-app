@@ -28,7 +28,7 @@ public class Request {
     private StatusEnum status;
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Column(name = "createdAt", updatable = false)
+    @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)

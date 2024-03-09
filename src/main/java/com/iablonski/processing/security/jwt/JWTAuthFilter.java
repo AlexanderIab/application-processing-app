@@ -46,14 +46,12 @@ public class JWTAuthFilter extends OncePerRequestFilter {
             String jwt = parseJWT(request);
             if (StringUtils.hasText(jwt) && jwtTokenProvider.validateJWToken(jwt)) {
                 UUID userId = jwtTokenProvider.getIdFromJWToken(jwt);
-
                 UserDetails userDetails = userDetailsService.loadUserById(userId);
-
+                userDetails.getAuthorities().forEach(grantedAuthority -> System.out.println(grantedAuthority.getAuthority()));
                 UsernamePasswordAuthenticationToken authentication
-                        = new UsernamePasswordAuthenticationToken(userDetails, userDetails.getAuthorities());
-
+                        = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                log.info("JWTAuthFilter - doFilterInternal {}", authentication);
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (Exception exception) {
