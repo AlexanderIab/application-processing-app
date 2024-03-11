@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
-
 public class DadataClientFallback implements DadataClient{
 
     @Override

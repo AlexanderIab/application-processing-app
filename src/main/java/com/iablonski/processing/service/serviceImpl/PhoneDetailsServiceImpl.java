@@ -29,9 +29,7 @@ public class PhoneDetailsServiceImpl implements PhoneDetailsService {
 
     @Override
     public PhoneDetails createPhoneDetails(String phone) {
-
         List<PhoneDetailsDTO> res = cleanPhoneNumber(phone, token, secret);
-        System.out.println(res);
         PhoneDetailsDTO phoneDetailsDTO = res.get(0);
         PhoneDetails phoneDetails = new PhoneDetails();
         phoneDetails.setCityCode(phoneDetailsDTO.city_code());
@@ -43,7 +41,6 @@ public class PhoneDetailsServiceImpl implements PhoneDetailsService {
     @Override
     public List<PhoneDetailsDTO> cleanPhoneNumber(String phoneNumber, String token, String secret) {
         List<String> queries = List.of(phoneNumber);
-        System.out.println(queries);
         return dadataClient.cleanPhoneNumber(queries, "Token " + token, secret).getBody();
     }
 }
