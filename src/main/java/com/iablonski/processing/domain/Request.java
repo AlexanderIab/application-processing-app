@@ -6,9 +6,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.UUID;
 
 @Entity
@@ -22,8 +20,9 @@ public class Request {
     @Column(nullable = false)
     private String title;
     private String text;
-    @Column(name = "phone_number")
-    private String phoneNumber;
+    @OneToOne
+    @JoinColumn(name = "phone_id", nullable = false)
+    private PhoneDetails phoneDetails;
     @Enumerated(value = EnumType.STRING)
     private StatusEnum status;
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
@@ -35,7 +34,7 @@ public class Request {
     private User user;
 
     @PrePersist
-    public void onCreate(){
+    public void onCreate() {
         this.createdAt = LocalDateTime.now();
     }
 }

@@ -5,6 +5,7 @@ import com.iablonski.processing.payload.response.MessageResponse;
 import com.iablonski.processing.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/user")
+@PreAuthorize("hasAnyAuthority('ADMIN')")
 public class UserController {
 
     private final UserService userService;
@@ -27,7 +29,7 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
-    @PostMapping("/all")
+    @PostMapping("/give/role")
     public ResponseEntity<MessageResponse> giveOperatorRole(@RequestBody UUID userId){
         userService.giveOperatorRoleToUser(userId);
         return ResponseEntity.ok(new MessageResponse("Role changed to OPERATOR"));

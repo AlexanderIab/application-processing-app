@@ -12,11 +12,11 @@ import java.util.stream.Collectors;
 
 public class UserDetailsImpl implements UserDetails {
     @Getter
-    private UUID id;
-    private String username;
+    private final UUID id;
+    private final String username;
     @JsonIgnore
-    private String password;
-    private Collection<? extends GrantedAuthority> authorities;
+    private final String password;
+    private final Collection<? extends GrantedAuthority> authorities;
 
     public UserDetailsImpl(UUID id, String username, String password, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
@@ -29,8 +29,7 @@ public class UserDetailsImpl implements UserDetails {
         List<GrantedAuthority> authorities = user.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName()))
                 .collect(Collectors.toList());
-        UserDetailsImpl userDetails = new UserDetailsImpl(user.getId(), user.getUsername(), user.getPassword(), authorities);
-        return userDetails;
+        return new UserDetailsImpl(user.getId(), user.getUsername(), user.getPassword(), authorities);
     }
 
     @Override

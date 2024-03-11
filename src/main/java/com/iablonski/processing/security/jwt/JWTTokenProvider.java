@@ -12,13 +12,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
-import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-// Создает токен
 @Slf4j
 @Component
 public class JWTTokenProvider {
@@ -31,7 +29,6 @@ public class JWTTokenProvider {
 
         String userId = userPrincipal.getId().toString();
 
-        // Объект, который мы передаем в JWT, содержит данные User
         Map<String, Object> claimsMap = new HashMap<>();
         claimsMap.put("id", userId);
         claimsMap.put("username", userPrincipal.getUsername());

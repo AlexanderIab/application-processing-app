@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 4
+      id: 5
       author: Alexander Iablonski
       changes:
         - createTable:
@@ -21,9 +21,6 @@ databaseChangeLog:
                   name: text
                   type: varchar(255)
               - column:
-                  name: phone_number
-                  type: varchar(20)
-              - column:
                   name: status
                   type: varchar(20)
                   constraints:
@@ -38,9 +35,20 @@ databaseChangeLog:
                   type: uuid
                   constraints:
                     nullable: false
+              - column:
+                  name: phone_id
+                  type: uuid
+                  constraints:
+                    nullable: false
         - addForeignKeyConstraint:
             baseTableName: requests
             baseColumnNames: user_id
             referencedTableName: users
             referencedColumnNames: id
             constraintName: fk_requests_user_id
+        - addForeignKeyConstraint:
+            baseTableName: requests
+            baseColumnNames: phone_id
+            referencedTableName: phones
+            referencedColumnNames: id
+            constraintName: fk_requests_phone_id

@@ -3,7 +3,6 @@ package com.iablonski.processing.service;
 import com.iablonski.processing.domain.StatusEnum;
 import com.iablonski.processing.dto.RequestDTO;
 import com.iablonski.processing.dto.RequestDetailsDTO;
-import jdk.jshell.Snippet;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
@@ -22,4 +21,3 @@ public interface RequestService {
     Page<RequestDetailsDTO> getRequestsBuUserParams(PageRequest pageRequest, Principal principal);
     Page<RequestDetailsDTO> getAllRequestsByStatus(StatusEnum statusEnum, PageRequest pageRequest);
 }
-

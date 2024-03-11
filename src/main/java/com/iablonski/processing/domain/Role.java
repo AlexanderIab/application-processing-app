@@ -1,9 +1,9 @@
 package com.iablonski.processing.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 import java.util.Set;
 import java.util.UUID;
@@ -17,6 +17,7 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     private String name;
+    @JsonIgnore
     @ManyToMany(mappedBy = "roles")
     private Set<User> users;
 }

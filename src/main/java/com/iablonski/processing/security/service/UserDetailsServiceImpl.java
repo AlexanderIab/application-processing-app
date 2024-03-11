@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
-//Класс помогает доставать данные из БД
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 

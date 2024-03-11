@@ -1,5 +1,6 @@
 package com.iablonski.processing.service.serviceImpl;
 
+import com.iablonski.processing.domain.PhoneDetails;
 import com.iablonski.processing.domain.Request;
 import com.iablonski.processing.domain.StatusEnum;
 import com.iablonski.processing.domain.User;
@@ -10,6 +11,7 @@ import com.iablonski.processing.exception.RequestNotFoundException;
 import com.iablonski.processing.exception.RequestUpdateException;
 import com.iablonski.processing.mapper.RequestMapper;
 import com.iablonski.processing.repository.RequestRepo;
+import com.iablonski.processing.service.PhoneDetailsService;
 import com.iablonski.processing.service.RequestService;
 import com.iablonski.processing.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,22 +29,25 @@ public class RequestServiceImpl implements RequestService {
     private final RequestRepo requestRepo;
     private final RequestMapper requestMapper;
     private final UserService userService;
+    private final PhoneDetailsService phoneDetailsService;
 
     @Autowired
-    public RequestServiceImpl(RequestRepo requestRepo, RequestMapper requestMapper, UserService userService) {
+    public RequestServiceImpl(RequestRepo requestRepo, RequestMapper requestMapper, UserService userService, PhoneDetailsService phoneDetailsService) {
         this.requestRepo = requestRepo;
         this.requestMapper = requestMapper;
         this.userService = userService;
+        this.phoneDetailsService = phoneDetailsService;
     }
 
     @Override
     @Transactional
     public void createRequest(RequestDTO requestDTO, Principal principal) {
         User user = userService.getUserFromPrincipal(principal);
+        PhoneDetails phoneDetails = phoneDetailsService.createPhoneDetails(requestDTO.phoneNumber());
         Request request = new Request();
         request.setTitle(requestDTO.title());
         request.setText(requestDTO.text());
-        request.setPhoneNumber(requestDTO.phoneNumber());
+        request.setPhoneDetails(phoneDetails);
         request.setStatus(StatusEnum.DRAFT);
         request.setUser(user);
         requestRepo.save(request);
@@ -52,6 +57,7 @@ public class RequestServiceImpl implements RequestService {
     public RequestDetailsDTO getRequestByIdAndStatus(UUID requestId) {
         Request request = requestRepo.findRequestByIdAndStatus(requestId, StatusEnum.SENT)
                 .orElseThrow(() -> new RequestNotFoundException("Request not found"));
+        System.out.println(request);
         return requestMapper.toRequestDTO(request);
     }
 
@@ -89,9 +95,12 @@ public class RequestServiceImpl implements RequestService {
     public void updateRequest(RequestDTO requestDTO) {
         Request request = requestRepo.findRequestByIdAndStatus(requestDTO.id(), StatusEnum.DRAFT)
                 .orElseThrow(() -> new RequestUpdateException("Unable to update request: request not found or not in DRAFT status"));
-        request.setTitle(requestDTO.title());
-        request.setText(requestDTO.text());
-        request.setPhoneNumber(requestDTO.phoneNumber());
+        if (requestDTO.title() != null) request.setTitle(requestDTO.title());
+        if (requestDTO.text() != null) request.setText(requestDTO.text());
+        if (requestDTO.phoneNumber() != null) {
+            PhoneDetails phoneDetails = phoneDetailsService.createPhoneDetails(requestDTO.phoneNumber());
+            request.setPhoneDetails(phoneDetails);
+        }
         requestRepo.save(request);
     }
 

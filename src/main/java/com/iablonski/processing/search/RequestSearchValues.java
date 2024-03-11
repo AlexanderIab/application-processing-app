@@ -6,7 +6,7 @@ import org.springframework.data.domain.Sort;
 public record RequestSearchValues(String username,
                                   StatusEnum status,
                                   Integer pageNumber,
-                                  String sortDirection){
+                                  String sortDirection) {
     public Sort.Direction getSortDirection() {
         if (sortDirection == null ||
                 sortDirection.trim().isEmpty() ||
