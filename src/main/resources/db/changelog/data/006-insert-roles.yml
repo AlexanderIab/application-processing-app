@@ -5,7 +5,7 @@ databaseChangeLog:
       changes:
         - sql:
             sql:
-              DROP EXTENSION "uuid-ossp";
+              DROP EXTENSION IF EXISTS "uuid-ossp";
               CREATE EXTENSION "uuid-ossp";
               INSERT INTO roles (id, name) VALUES
               (uuid_generate_v4(), 'ADMIN'),
