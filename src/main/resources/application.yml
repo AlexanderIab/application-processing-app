@@ -8,6 +8,6 @@ spring:
       ddl-auto: none
     show-sql: true
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
+    url: jdbc:postgresql://localhost:5432/processing
     username: postgres
     password: postgres
